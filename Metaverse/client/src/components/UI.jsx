@@ -22,8 +22,7 @@ export const avatarUrlAtom = atom(
 
 const PasswordInput = ({ onClose, onSuccess }) => {
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  // TODO: To make things properly we should have a loading state 😊
+  const [error, setError] = useState("");  // TODO: To make things properly we should have a loading state 😊
 
   const checkPassword = () => {
     socket.emit("passwordCheck", password);
@@ -174,9 +173,25 @@ export const UI = () => {
         console.error("Error fetching avatar model:", error);
       }
     };
+    const fetchGold = async () => {
+      // const userid = localStorage.getItem('userid');
+      try {
+        const response = await fetch(`http://localhost:5000/points/get_points/user1234`);
+
+        if (!response.ok) {
+          console.error("No score Found");
+          return;
+        }
+
+        const data = await response.json();
+      } catch (error) {
+        console.error("error Fetching the Gold and Diamonds", error);
+      }
+    };
 
     if (playerId) {
       fetchAvatar();
+      fetchGold();
     }
   }, [playerId, setAvatarUrl]);
 
